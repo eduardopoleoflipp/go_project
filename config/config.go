@@ -1,26 +1,35 @@
 package config
 
-import "os"
+import (
+	"os"
+
+	"github.com/imdario/mergo"
+)
 
 type Config struct {
-	Name     string
-	MyConfig string
+	Name          string
+	MyConfig      string
+	DefaultConfig string
+	NotSetConfig  string
 }
 
-var Env Config
+var DefaultConfig = Config{DefaultConfig: "defaultValue"}
+var AppConfig Config
 
 func InitConfig() Config {
 	env := os.Getenv("ENVIRONMENT")
 	switch env {
 	case "development":
-		Env = development
+		AppConfig = development
 	case "staging":
-		Env = staging
+		AppConfig = staging
 	case "production":
-		Env = production
+		AppConfig = production
 	default:
 		panic("Environment not setup")
 	}
 
-	return Env
+	mergo.Merge(AppConfig, DefaultConfig)
+
+	return AppConfig
 }
