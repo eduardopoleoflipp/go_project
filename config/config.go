@@ -26,7 +26,7 @@ func InitConfig() Config {
 	case "production":
 		AppConfig = production
 	default:
-		panic("Environment not setup")
+		AppConfig = production
 	}
 
 	mergo.Merge(AppConfig, DefaultConfig)
